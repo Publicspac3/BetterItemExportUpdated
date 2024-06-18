@@ -1,5 +1,5 @@
 # BetterItemExportUpdated
-Updated version of Martin's [BetterItemExport Plugin](https://github.com/Martinii89/BetterItemExport). that uses a different Enum for ``PRODUCTQUALITY``.
+Updated version of Martin's [BetterItemExport Plugin](https://github.com/Martinii89/BetterItemExport) that uses a different Enum for ``PRODUCTQUALITY``.
 
 This does not use the current item quality name found in RL. This uses the old one for our use-case.
 
