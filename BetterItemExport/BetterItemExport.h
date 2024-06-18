@@ -36,6 +36,21 @@ enum class EQUIPSLOT {
 	CURRENCY = 26
 };
 
+enum PRODUCTQUALITY2
+{
+	Common2 = 0,
+	Uncommon2 = 1,
+	Rare2 = 2,
+	VeryRare2 = 3,
+	Import2 = 4,
+	Exotic2 = 5,
+	BlackMarket2 = 6,
+	Premium2 = 7,
+	Limited2 = 8,
+	Legacy2 = 9,
+	MAX2 = 10
+};
+
 struct ProductData {
 	int id;
 	std::string productName;
@@ -68,7 +83,7 @@ struct ItemData {
 };
 
 
-class BetterItemExport: public BakkesMod::Plugin::BakkesModPlugin/*, public BakkesMod::Plugin::PluginWindow*/
+class BetterItemExport : public BakkesMod::Plugin::BakkesModPlugin/*, public BakkesMod::Plugin::PluginWindow*/
 {
 
 	//std::shared_ptr<bool> enabled;
@@ -86,7 +101,7 @@ class BetterItemExport: public BakkesMod::Plugin::BakkesModPlugin/*, public Bakk
 
 	void RLCDExport();
 
-	std::vector<ProductData> GetProducts(std::function<bool(ProductData&)> filter = [](ProductData&){return true;});
+	std::vector<ProductData> GetProducts(std::function<bool(ProductData&)> filter = [](ProductData&) {return true; });
 
 	// Inherited via PluginWindow
 	/*
@@ -103,7 +118,7 @@ class BetterItemExport: public BakkesMod::Plugin::BakkesModPlugin/*, public Bakk
 	virtual bool IsActiveOverlay() override;
 	virtual void OnOpen() override;
 	virtual void OnClose() override;
-	
+
 	*/
 };
 

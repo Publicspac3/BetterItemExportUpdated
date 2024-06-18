@@ -35,7 +35,7 @@ std::tuple<bool, SpecialEdition> BetterItemExport::IsSpecialEdition(ProductWrapp
 		}
 	}
 	if (auto it = special_edition_set.find(prod_to_check.GetID()); it != special_edition_set.end()) {
-		return {true, it->second};
+		return { true, it->second };
 	}
 	return { false, SpecialEdition{} };
 }
@@ -97,56 +97,57 @@ void BetterItemExport::GetCompatibleProducts(ProductWrapper& prod, ProductData& 
 void BetterItemExport::GetProductQuality(ProductWrapper& prod, ProductData& data)
 {
 	data.qualityId = static_cast<int>(prod.GetQuality());
-	const auto quality = static_cast<PRODUCTQUALITY>(data.qualityId);
+	const auto quality = static_cast<PRODUCTQUALITY2>(data.qualityId);
 	switch (quality)
 	{
-	case Common:
+	case Common2:
 		data.qualityName = "Common";
 		break;
-	case Uncommon:
+	case Uncommon2:
 		data.qualityName = "Uncommon";
 		break;
-	case Rare:
+	case Rare2:
 		data.qualityName = "Rare";
 		break;
-	case VeryRare:
+	case VeryRare2:
 		data.qualityName = "Very Rare";
 		break;
-	case Import:
+	case Import2:
 		data.qualityName = "Import";
 		break;
-	case Exotic:
+	case Exotic2:
 		data.qualityName = "Exotic";
 		break;
-	case BlackMarket:
+	case BlackMarket2:
 		data.qualityName = "Black Market";
 		break;
-	case Premium:
+	case Premium2:
 		data.qualityName = "Premium";
 		break;
-	case Limited:
+	case Limited2:
 		data.qualityName = "Limited";
 		break;
 	case 9: // TODO: replace with Legacy when it's available upstream
 		data.qualityName = "Legacy";
 		break;
-	//default:
-	//	data.qualityName = "Unknown";
-	//	break;
+		//default:
+		//	data.qualityName = "Unknown";
+		//	break;
 	}
 }
 
 void BetterItemExport::RLCDExport()
 {
-	std::set<EQUIPSLOT> slots_to_export{ 
-		EQUIPSLOT::BODY, 
-		EQUIPSLOT::ROCKETBOOST, 
-		EQUIPSLOT::WHEELS, 
-		EQUIPSLOT::ANTENNA, 
-		EQUIPSLOT::TRAIL, 
+	std::set<EQUIPSLOT> slots_to_export{
+		EQUIPSLOT::BODY,
+		EQUIPSLOT::ROCKETBOOST,
+		EQUIPSLOT::WHEELS,
+		EQUIPSLOT::ANTENNA,
+		EQUIPSLOT::TRAIL,
 		EQUIPSLOT::DECAL,
 		EQUIPSLOT::TOPPER,
-		EQUIPSLOT::PAINTFINISH
+		EQUIPSLOT::PAINTFINISH,
+		EQUIPSLOT::GOALEXPLOSION
 	};
 	std::set<int> items_to_exclude{
 		1412, // Mystery Universal Decal
@@ -161,7 +162,7 @@ void BetterItemExport::RLCDExport()
 		5368, // Uncommon Drop
 		5369, // Very Rare Drop
 	};
-	std::ofstream log{gameWrapper->GetBakkesModPath() / "rlcd_export.log"};
+	std::ofstream log{ gameWrapper->GetBakkesModPath() / "rlcd_export.log" };
 	auto items_to_export = GetProducts([&](ProductData& prod) {
 		if (prod.id != 0 &&
 			slots_to_export.find(static_cast<EQUIPSLOT>(prod.slotId)) != slots_to_export.end() &&
@@ -170,7 +171,7 @@ void BetterItemExport::RLCDExport()
 			return true;
 		}
 		return false;
-	});
+		});
 
 	// Find duplicate items, removing the lower/replaced
 	for (auto i = items_to_export.begin(); i != items_to_export.end();) {
@@ -179,14 +180,15 @@ void BetterItemExport::RLCDExport()
 			if ((*i).assetPath == item.assetPath)
 				return true;
 			return false;
-		});
+			});
 
 		if (j == items_to_export.end()) {
 			++i;
-		} else {
+		}
+		else {
 			const auto a = *i;
 			const auto b = *j;
-			log << "info: " << a.id << " (" << a.productName << ") and "<< b.id
+			log << "info: " << a.id << " (" << a.productName << ") and " << b.id
 				<< " (" << b.productName << ") have the same asset path ("
 				<< a.assetPath << "), dropping " << a.id << "\n";
 			i = items_to_export.erase(i);
@@ -213,10 +215,10 @@ void BetterItemExport::RLCDExport()
 
 	// print item data
 	for (const auto& item : items_to_export) {
-		csv 
+		csv
 			<< item.id << ","
 			<< item.productName << ","
-			<< (item.paintable ? "1": "0") << ","
+			<< (item.paintable ? "1" : "0") << ","
 			<< item.slot << ","
 			<< item.assetPath << ","
 			<< item.qualityName
@@ -255,21 +257,21 @@ std::string ProductData::DebugString()
 			ss << "\t" << body_id << "\n";
 		}
 	}
-	
+
 
 	return ss.str();
 }
 
 void to_json(json& j, const ProductData& p)
 {
-	j = json{ 
-		{ "productName", p.productName }, 
-		{ "id", p.id }, 
-		{ "paintable", p.paintable }, 
-		{ "qualityId", p.qualityId }, 
-		{ "qualityName", p.qualityName }, 
-		{ "slot", p.slot }, 
-		{ "slotId", p.slotId }, 
+	j = json{
+		{ "productName", p.productName },
+		{ "id", p.id },
+		{ "paintable", p.paintable },
+		{ "qualityId", p.qualityId },
+		{ "qualityName", p.qualityName },
+		{ "slot", p.slot },
+		{ "slotId", p.slotId },
 		{ "compatibleProducts", p.compatibleProducts },
 		{ "assetName", p.assetName },
 		{ "thumbnailName", p.thumbnailName },
